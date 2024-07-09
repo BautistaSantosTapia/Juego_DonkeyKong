@@ -58,8 +58,8 @@ def colision_circulos(rect_1, rect_2)->bool:
 
 
 def crear_coin(imagen=None)->dict:
-    width_coin = 40
-    height_coin = 40
+    width_coin = 70
+    height_coin = 70
 
     return new_player(imagen, randint(0, WIDTH - width_coin), randint(-HEIGHT, 0 - height_coin), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
 

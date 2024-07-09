@@ -332,37 +332,47 @@ clock = pygame.time.Clock()
 
 #configuracion
 SCREEN = pygame.display.set_mode(SCREEN_SIZE)
-pygame.display.set_caption("Primer Juego")
+pygame.display.set_caption("Juego Donkey Kong")
 
 #texto
-fuente = pygame.font.SysFont("Arial", 42)
+fuente = pygame.font.SysFont("Arial", 36)
 
 #imagenes
-imagen_ovni = pygame.image.load("./src/assets/ovni.png")
-imagen_asteroide = pygame.image.load("./src/assets/asteroide.png")
-imagen_asteroide_2 = pygame.image.load("./src/assets/asteroide2.png")
-imagen_background = pygame.transform.scale(pygame.image.load("./src/assets/fondo.jpg"), SCREEN_SIZE)
-imagen_start = pygame.transform.scale(pygame.image.load("./src/assets/start_button.png"), START_BUTTON)
-rect_start = imagen_start.get_rect(center = START_BUTTON_POS)
-# rect_start.center = START_BUTTON_POS
-imagen_vida = pygame.transform.scale(pygame.image.load("./src/assets/corazon.png"), VIDA_SIZE)
+imagen_banana = pygame.image.load("./src/assets/banana.png")#
+imagen_fuego = pygame.image.load("./src/assets/fuego.png")#
+imagen_background = pygame.transform.scale(pygame.image.load("./src/assets/pared_ladrillos.webp"), SCREEN_SIZE)#
+imagen_inicio = pygame.transform.scale(pygame.image.load("./src/assets/selva.webp"), SCREEN_SIZE)#
+imagen_fin = pygame.transform.scale(pygame.image.load("./src/assets/selva_talada.webp"), SCREEN_SIZE)#
+imagen_start = pygame.transform.scale(pygame.image.load("./src/assets/start.png"), START_BUTTON)#
+rect_start = imagen_start.get_rect(center = START_BUTTON_POS) # rect_start.center = START_BUTTON_POS
+imagen_vida = pygame.transform.scale(pygame.image.load("./src/assets/corazon.png"), VIDA_SIZE)#
 rect_vida = imagen_vida.get_rect(center = VIDA_POS)
+# imagen_asteroide_2 = pygame.image.load("./src/assets/asteroide2.png")
 
 
 #sonidos
-sonido_coin = pygame.mixer.Sound("./src/assets/coin.mp3")
-sonido_exito = pygame.mixer.Sound("./src/assets/exito.mp3")
-sonido_gameover = pygame.mixer.Sound("./src/assets/game_over.mp3")
+pygame.mixer.music.load("./src/assets/musica_fondo.mp3")#
+sonido_pausa = pygame.mixer.Sound("./src/assets/pausa.mp3")#
+sonido_disparo = pygame.mixer.Sound("./src/assets/disparo.mp3")#
+sonido_vida = pygame.mixer.Sound("./src/assets/recompensa.mp3")
+sonido_explosion = pygame.mixer.Sound("./src/assets/explosion.mp3")#
+sonido_gameover = pygame.mixer.Sound("./src/assets/perder.mp3")#
+sonido_exito = pygame.mixer.Sound("./src/assets/ganar.mp3")
+sonido_dano = pygame.mixer.Sound("./src/assets/dano.ogg")#
 
-sonido_coin.set_volume(0.01)
+sonido_disparo.set_volume(0.1)
+sonido_pausa.set_volume(0.1)
+pygame.mixer.music.set_volume(0.1)
+sonido_vida.set_volume(0.1)
+sonido_explosion.set_volume(0.1)
+sonido_gameover.set_volume(0.1)
 sonido_exito.set_volume(0.1)
-sonido_gameover.set_volume(0.01)
-pygame.mixer.music.load("./src/assets/musica_fondo.mp3")
-pygame.mixer.music.set_volume(0.01)
+sonido_dano.set_volume(0.1)
+
 
 
 # evento personalizado
-TIMER_COIN = USEREVENT + 1
+# TIMER_COIN = USEREVENT + 1
 GAME_TIMEOUT = USEREVENT + 2
 
 max_puntaje = 0
@@ -377,8 +387,8 @@ while True:
     esperar_usuario(K_SPACE)"""
 
     pygame.mouse.set_visible(True)
-    SCREEN.fill(BLACK)
-    mostrar_texto(SCREEN, "Asteroides", fuente, PUNTUACION_POS, WHITE)
+    SCREEN.blit(imagen_inicio, ORIGEN)
+    mostrar_texto(SCREEN, "Donkey Kong", fuente, PUNTUACION_POS, WHITE)
     SCREEN.blit(imagen_start, rect_start)
     pygame.display.flip()
     esperar_click_usuario(rect_start)
@@ -400,16 +410,28 @@ while True:
     move_right = False
     move_up = False
     move_down = False
-    pygame.time.set_timer(TIMER_COIN, 5000)
+    desplazamiento_y = 0
+    potencia_salto = -18
+    limite_velocidad_salto = 18
+    gravedad = 1
+    esta_saltando = False
+    # pygame.time.set_timer(TIMER_COIN, 5000)
     pygame.time.set_timer(GAME_TIMEOUT, 10000)
 
     
 
     #creamos al jugador/bloque
-    player = new_player(imagen_ovni, randint(0, WIDTH - rect_width), randint(0, HEIGHT - rect_height), rect_width, rect_height, color_aleatorio(), 3, randrange(31), rect_height//2)#dir = choice(direcciones), radio=randint(-1,25)
+    player = new_player(imagen_banana, 20, 479, rect_width, rect_height, color_aleatorio(), 3, randrange(31), rect_height // 2)
+    #piso
+    pisos = [
+        {"rect": pygame.Rect(0, 590, 800, 20), "color": BLACK, "speed_x": 5, "speed_y": 5},
+        {"rect": pygame.Rect(0, 450, 650, 20), "color": BLACK, "speed_x": 5, "speed_y": 5},
+        {"rect": pygame.Rect(150, 300, 650, 20), "color": BLACK, "speed_x": 5, "speed_y": 5},
+        {"rect": pygame.Rect(0, 150, 650, 20), "color": BLACK, "speed_x": 5, "speed_y": 5}
+    ]
     #monedas
     coins = []
-    cargar_lista_coins(coins, CANT_COINS, imagen_asteroide_2)
+    cargar_lista_coins(coins, CANT_COINS, imagen_fuego)
     # vidas
     vidas = []
     cargar_lista_vidas(vidas, vidas_actuales, imagen_vida)#CANT_VIDAS
@@ -441,16 +463,15 @@ while True:
                         pygame.mixer.music.unpause()
                     sonando_musica = not sonando_musica
                 if event.key == K_p:
+                    sonido_pausa.play()
                     pygame.mixer.music.pause()
-                    mostrar_texto(SCREEN, "Pausa", fuente, PAUSA_POS, BLACK, RED)
+                    mostrar_texto(SCREEN, "Pausa", fuente, PAUSA_POS, BLACK, None)
                     esperar_usuario(K_p)
                     if sonando_musica:
                         pygame.mixer.music.unpause()
                 if event.key == K_f:
                     if not laser:
-                        """
-                            sonido laser
-                        """
+                        sonido_disparo.play()
                         laser = crear_laser(player["rect"].midtop)
             
             if event.type == KEYUP:
@@ -463,26 +484,29 @@ while True:
                 if event.key == K_DOWN:
                     move_down = False
             
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    new_coin = crear_coin()
-                    new_coin["color"] = CYAN
-                    new_coin["rect"].center = event.pos
-                    coins.append(new_coin)
-                if event.button == 3:
-                    player["rect"].center = SCREEN_CENTER
+            # if event.type == MOUSEBUTTONDOWN:
+            #     if event.button == 1:
+            #         new_coin = crear_coin()
+            #         new_coin["color"] = CYAN
+            #         new_coin["rect"].center = event.pos
+            #         coins.append(new_coin)
+            #     if event.button == 3:
+            #         player["rect"].center = SCREEN_CENTER
             
-            if event.type == MOUSEMOTION:
-                if event.buttons[2] == 1:
-                    player["rect"].center = event.pos
+            # if event.type == MOUSEMOTION:
+            #     if event.buttons[2] == 1:
+            #         player["rect"].center = event.pos
 
-            if event.type == TIMER_COIN:
-                new_coin = crear_coin(imagen_asteroide)
-                coins.append(new_coin)
+            # if event.type == TIMER_COIN:
+            #     new_coin = crear_coin(imagen_fuego)
+            #     coins.append(new_coin)
 
             if event.type == GAME_TIMEOUT or vidas_actuales == 0:
                 is_running = False
 
+
+        # Guardar la posición anterior del personaje
+        old_player_x, old_player_y = player["rect"].x, player["rect"].y
 
 
     #actualizar elementos
@@ -509,33 +533,30 @@ while True:
             else:
                 player["rect"].bottom += SPEED
 
-        pygame.mouse.set_pos(player["rect"].center)
+        # pygame.mouse.set_pos(player["rect"].center) PUEDE O NO ESTAR, NO SE MUY BIEN
 
 
         if laser:
-            laser["rect"].move_ip(0,-laser["speed"])
+            laser["rect"].move_ip(0,-laser["speed"]) # CAMBIAR ESTO
             if laser["rect"].bottom < 0:
                 laser = None
+        """
+        if laser:
+            if move_right:
+                laser["rect"].move_ip(+laser["speed"],0)
+            elif move_left:
+                laser["rect"].move_ip(-laser["speed"],0)
+            if laser["rect"].left < 0 or laser["rect"].right < WIDTH:
+                laser = None"""
 
 
         for coin in coins:
             rect_coin = coin["rect"]
-            coin["rect"].move_ip(0, coin["speed_y"])
+            coin["rect"].move_ip(0, coin["speed_y"])  # CAMBIAR ESTO
             if rect_coin.top > HEIGHT:
                 rect_coin.bottom = 0
                 """aca puso algo no se porque"""
 
-
-        """# borra y restaura monedas
-        for coin in coins[:]: # es una copia de la lista [desde:hasta]
-            if colision_circulos(coin["rect"], player["rect"]):
-                sonido_coin.play()  
-                #contador Score
-                puntuacion+=1    
-                coins.remove(coin)
-                if len(coins) == 0:
-                    sonido_exito.play()
-                    cargar_lista_coins(coins, CANT_COINS, imagen_asteroide_2)"""
         
         # 
         for coin in coins[:]:
@@ -546,14 +567,11 @@ while True:
                     vidas_actuales -= 1
                     vidas_a_mostrar -= 1
                     vidas.remove(vidas[-1])
-                    """
-                        sonido choque
-                        y algo comentado
-                    """
+                    sonido_dano.play()
                 if laser:
                     if detectar_colision(laser["rect"], coin["rect"]):
                         puntuacion += 1
-                        sonido_coin.play()  
+                        sonido_explosion.play()  
                         coins.remove(coin)
                         # coins.append(crear_coin(imagen_asteroide_2)) no hace falta que aparezca otro meteorito
                         laser = None
@@ -563,7 +581,7 @@ while True:
     #dibujar pantalla
         SCREEN.blit(imagen_background, ORIGEN)
 
-        pygame.draw.rect(SCREEN, player["color"], player["rect"], player["borde"], player["radio"]) # hitbox
+        #pygame.draw.rect(SCREEN, player["color"], player["rect"], player["borde"], player["radio"])  hitbox
 
         if laser:
             pygame.draw.rect(SCREEN, laser["color"], laser["rect"])
@@ -583,10 +601,10 @@ while True:
                 vida["rect"].left += 25
             vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
 
-        mostrar_texto(SCREEN,f"Puntuacion: {puntuacion}", fuente, PUNTUACION_POS, BLACK, RED)
+        mostrar_texto(SCREEN,f"Puntuacion: {puntuacion}", fuente, PUNTUACION_POS, BLACK, None)
 
         if not sonando_musica:
-            mostrar_texto(SCREEN,f"Mute", fuente, MUTE_POS, BLACK, RED)
+            mostrar_texto(SCREEN,f"Mute", fuente, MUTE_POS, BLACK, None)
 
         SCREEN.blit(player["img"], player["rect"])
 
@@ -600,11 +618,11 @@ while True:
         max_puntaje = puntuacion
     pygame.mixer.music.stop()
     sonido_gameover.play()
-    SCREEN.fill(BLACK)
-    mostrar_texto(SCREEN, "Game Over", fuente, SCREEN_CENTER, WHITE)
-    mostrar_texto(SCREEN, "Pulsa SPACE para comenzar", fuente, START_POS, WHITE)
-    mostrar_texto(SCREEN,f"Ultima Puntuacion: {puntuacion}", fuente, ULT_PUNTUACION_POS, BLACK, GREEN)
-    mostrar_texto(SCREEN,f"Maxima Puntuacion: {max_puntaje}", fuente, MAX_PUNTUACION_POS, BLACK, GREEN)
+    SCREEN.blit(imagen_fin, ORIGEN)
+    mostrar_texto(SCREEN, "Game Over", fuente, SCREEN_CENTER, BLACK)
+    mostrar_texto(SCREEN, "Pulsa SPACE para volver a jugar", fuente, START_POS, BLACK)
+    mostrar_texto(SCREEN,f"Ultima Puntuacion: {puntuacion}", fuente, ULT_PUNTUACION_POS, BLACK, None)
+    mostrar_texto(SCREEN,f"Maxima Puntuacion: {max_puntaje}", fuente, MAX_PUNTUACION_POS, BLACK, None)
     esperar_usuario(K_SPACE)
 
 
