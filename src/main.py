@@ -349,6 +349,7 @@ imagen_vida = pygame.transform.scale(pygame.image.load("./src/assets/corazon.png
 rect_vida = imagen_vida.get_rect(center = VIDA_POS)
 imagen_mono = pygame.transform.scale(pygame.image.load("./src/assets/mono.png"), MONO_SIZE)#
 imagen_sierra = pygame.transform.scale(pygame.image.load("./src/assets/sierra.webp"), SIERRA_SIZE)#
+imagen_arma = pygame.transform.scale(pygame.image.load("./src/assets/arma.png"), VIDA_SIZE)#
 
 
 #sonidos
@@ -400,6 +401,8 @@ while True:
     vidas_actuales = 10##############
     vidas_a_mostrar = 10##############
     item_vida = None
+    arma = None
+    bandera_poder = False
     pygame.mixer.music.play(-1)
     sonando_musica = True
     move_left = False
@@ -411,8 +414,8 @@ while True:
     limite_velocidad_salto = 18
     gravedad = 1
     esta_saltando = False
-    pygame.time.set_timer(TIMER_LIFE, 30000)
-    pygame.time.set_timer(GAME_TIMEOUT, 100000)
+    pygame.time.set_timer(TIMER_LIFE, 10000)
+    # pygame.time.set_timer(GAME_TIMEOUT, 100000)
 
     
 
@@ -446,6 +449,8 @@ while True:
         {"rect": pygame.Rect(600, 40, 50, 50), "color": BLACK, "img": imagen_sierra}
     ]
 
+    #arma
+    arma = power_up(imagen_arma, 250, 390, 45, 45)
 
 
 
@@ -483,12 +488,17 @@ while True:
                 if event.key == K_d:
                     if not laser_right:
                         sonido_disparo.play()
-                        laser_right = crear_laser(player["rect"].midright)
+                        if bandera_poder==True:
+                            laser_right = crear_laser(player["rect"].midright,speed=35,laser_width=13,laser_height=13)
+                        else:
+                            laser_right = crear_laser(player["rect"].midright)
                 if event.key == K_a:
                     if not laser_left:
                         sonido_disparo.play()
-                        laser_left = crear_laser(player["rect"].midleft)
-            
+                        if bandera_poder==True:
+                            laser_left = crear_laser(player["rect"].midleft,speed=35,laser_width=13,laser_height=13)
+                        else:
+                            laser_left = crear_laser(player["rect"].midleft)
             
             if event.type == KEYUP:
                 if event.key == K_LEFT:
@@ -501,10 +511,11 @@ while True:
                     move_down = False
 
             if event.type == TIMER_LIFE:
-                item_vida = new_life(imagen_vida ,20, 200, 25, 25)
+                item_vida = new_life(imagen_vida ,500, 400, 25, 25)
 
             if event.type == GAME_TIMEOUT or vidas_actuales == 0:
                 is_running = False
+                """ir a pantalla game over"""
 
 
         # Guardar la posición anterior del personaje
@@ -536,7 +547,6 @@ while True:
                 player["rect"].bottom += SPEED
 
 
-
         if laser_right:
             laser_right["rect"].move_ip(+laser_right["speed"],0)
             if laser_right["rect"].left > WIDTH:
@@ -546,7 +556,6 @@ while True:
             laser_left["rect"].move_ip(-laser_left["speed"],0)
             if laser_left["rect"].right < 0:
                 laser_left = None
-
 
 
         for coin in coins_left:
@@ -563,6 +572,7 @@ while True:
                     vidas_a_mostrar -= 1
                     vidas.remove(vidas[-1])
                     sonido_dano.play()
+                    pygame.time.wait(100)
                 if laser_right:
                     if detectar_colision(laser_right["rect"], coin["rect"]):
                         puntuacion += 1
@@ -585,6 +595,7 @@ while True:
                     vidas_a_mostrar -= 1
                     vidas.remove(vidas[-1])
                     sonido_dano.play()
+                    pygame.time.wait(100)
                 if laser_left:
                     if detectar_colision(laser_left["rect"], coin["rect"]):
                         puntuacion += 1
@@ -617,6 +628,14 @@ while True:
                 vidas_actuales -= 1
                 vidas_a_mostrar -= 1
                 vidas.remove(vidas[-1])
+                pygame.time.wait(250)
+
+        if arma:
+            if detectar_colision(arma["rect"], player["rect"]):
+                sonido_vida.play()
+                bandera_poder = True
+                arma = None
+        
 
                 
     #dibujar pantalla
@@ -655,6 +674,9 @@ while True:
 
         if item_vida and bandera_vida==True:
             SCREEN.blit(item_vida["img"], item_vida["rect"])
+            
+        if arma:
+            SCREEN.blit(arma["img"], arma["rect"])
 
         
         SCREEN.blit(mono_win["img"], mono_win["rect"])

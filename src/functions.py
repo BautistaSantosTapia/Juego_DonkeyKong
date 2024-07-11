@@ -66,7 +66,7 @@ def crear_coin_right(imagen=None)->dict:
     width_coin = 47
     height_coin = 47
 
-    return new_player(imagen, randint(-WIDTH, 0-width_coin), randint(300,415), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
+    return new_player(imagen, randint(-WIDTH, 0-width_coin), randint(155,270), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
                             
 def cargar_lista_coins_left(lista:list, cant:int, imagen=None):
     for _ in range(cant):
@@ -86,10 +86,13 @@ def cargar_lista_vidas(lista:list, cant:int, imagen=None):
 def new_life(imagen, x, y, width, height):
     return new_player(imagen, x, y, width, height)
 
+def power_up(imagen, x, y, width, height):
+    return new_player(imagen, x, y, width, height)
+
 def ganar_juego(imagen, x, y, width, height):
     return new_player(imagen, x, y, width, height)
         
-def crear_laser(posicion:tuple[int,int],color:tuple[int,int,int]=(0,0,0), speed:int=15):
+def crear_laser(posicion:tuple[int,int],color:tuple[int,int,int]=(0,0,0), speed:int=15, laser_width=6, laser_height=6):
     r = pygame.Rect(0, 0, laser_width, laser_height)
     r.midbottom = posicion
     return {"rect": r, "color":color,"speed":speed}
