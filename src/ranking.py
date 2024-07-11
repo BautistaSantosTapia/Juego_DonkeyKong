@@ -1,5 +1,5 @@
 import pygame
-
+from settings import SCREEN_SIZE, ORIGEN, MID_WIDTH_SCREEN
 
 def ver_rankings(pantalla):
     print("hosn")
@@ -9,7 +9,7 @@ def ver_rankings(pantalla):
     # Leer los scores desde un archivo
     try:
         with open('./src/Ranking.csv', 'r',encoding='utf-8') as file:
-            scores = [line.strip().split(",") for line in file.readlines()]
+            scores = [line.strip().split() for line in file.readlines()]
     except FileNotFoundError:
         scores = []
         print("fallo")
@@ -23,13 +23,13 @@ def ver_rankings(pantalla):
                 if event.key == pygame.K_SPACE:
                     running = False
 
-        pantalla.fill((255, 255, 255))
+        pantalla.blit(pygame.transform.scale(pygame.image.load("./src/assets/selva_ranking.webp"), SCREEN_SIZE), ORIGEN)
 
         font = pygame.font.Font(None, 36)
         y_offset = 100
         for score in scores:
-            score_text = font.render(f'{score[0]}: {score[1]}', True, (0, 0, 0))
-            pantalla.blit(score_text, (100, y_offset))
+            score_text = font.render(f'Puntuacion: {score[0]}', True, (0, 0, 0))
+            pantalla.blit(score_text, (300, y_offset))
             y_offset += 40
 
         pygame.display.flip()

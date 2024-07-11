@@ -2,7 +2,7 @@ import pygame
 from random import randrange, randint
 from settings import *
 from ranking import ver_rankings
-from game_over import pantalla_game_over
+# from game_over import pantalla_game_over
 from pygame.locals import *
 from sys import exit
 import os
@@ -164,12 +164,12 @@ def esperar_click_usuario_3(rect_1:pygame.Rect,rect_2:pygame.Rect,rect_3:pygame.
 
 
 
-def subir_ranking_csv(nombre_archivo, puntuacion, nombre="Desconocido"):
+def subir_ranking_csv(nombre_archivo, puntuacion):#, nombre="Desconocido"
     directorio_actual = os.path.dirname(__file__)
     path = os.path.join(directorio_actual, nombre_archivo)
 
     with open(path, mode= "a", encoding= "utf-8") as archivo:
-            archivo.write(f"{nombre} {puntuacion}\n")
+            archivo.write(f"{puntuacion}\n")#{nombre} 
 
 """
 def subir_ranking_csv(nombre_archivo, puntuacion):

@@ -382,10 +382,11 @@ sonido_dano.set_volume(0.1)
 TIMER_LIFE = USEREVENT + 1
 GAME_TIMEOUT = USEREVENT + 2
 
-max_puntaje = 0
-
 # bucle principal
 def menu_principal():
+
+
+
     while True:
 
         # pantalla inicio
@@ -406,6 +407,7 @@ def menu_principal():
         pygame.mouse.set_visible(False)
 
         # juego principal
+        max_puntaje = 0
         puntuacion = 0
         laser_right = None
         laser_left = None
@@ -729,8 +731,7 @@ def menu_principal():
             max_puntaje = puntuacion
         pygame.mixer.music.stop()
         sonido_gameover.play()
-        nombre = input("Ingresa tu nombre")
-        subir_ranking_csv("Ranking.csv",str(puntuacion), nombre)
+        subir_ranking_csv("Ranking.csv",str(puntuacion))
         SCREEN.blit(imagen_fin, ORIGEN)
         mostrar_texto(SCREEN, "Game Over", fuente, SCREEN_CENTER, BLACK)
         mostrar_texto(SCREEN, "Pulsa SPACE para volver a jugar", fuente, START_POS, BLACK)
@@ -741,3 +742,5 @@ def menu_principal():
 
     salir_juego()
     #fin
+
+menu_principal()
