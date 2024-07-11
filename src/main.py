@@ -394,7 +394,7 @@ def menu_principal():
         # pantalla inicio
         pygame.mouse.set_visible(True)
         SCREEN.blit(imagen_inicio, ORIGEN)
-        mostrar_texto(SCREEN, "Donkey Kong", fuente, TITULO_POS, WHITE)
+        mostrar_texto(SCREEN, "Donkey Kong", pygame.font.SysFont("Arial", 78), TITULO_POS_2, WHITE)
         SCREEN.blit(imagen_start, rect_start)
         SCREEN.blit(imagen_ranking, rect_ranking)
         SCREEN.blit(imagen_config, rect_config)
