@@ -1,9 +1,20 @@
-import pygame
+"""import pygame
 import sys
 
 def game_over_screen(screen, score):
     clock = pygame.time.Clock()
     running = True
+
+
+    """ """
+    nombre = input("Ingrese su nombre: ")
+    # def subir_ranking_csv(nombre_archivo, puntuacion):
+    #     directorio_actual = os.path.dirname(__file__)
+    #     path = os.path.join(directorio_actual, nombre_archivo)
+
+    #     with open(path, mode= "a", encoding= "utf-8") as archivo:
+    #             archivo.write(f "{nombre} - {puntuacion}\n")
+                """ """
 
     # Guardar el puntaje en el archivo
     name = input("Enter your initials: ")
@@ -32,3 +43,53 @@ def game_over_screen(screen, score):
 
         pygame.display.flip()
         clock.tick(60)
+"""
+
+
+############################
+
+import pygame
+from src.settings import *
+from random import *
+from src.functions import *
+from pygame.locals import *
+from sys import exit
+import os
+from game_guia_profe import game_loop
+from config import config_menu
+from ranking import show_ranking
+from game_over import game_over_screen
+
+
+
+# pantalla final
+def game_over_screen(SCREEN, puntuacion):
+    clock = pygame.time.Clock()
+    is_running = True
+    pygame.mouse.set_visible(True)
+
+
+    nombre = input("Ingrese su nombre: ")
+    # def subir_ranking_csv(nombre, puntuacion):
+    #     directorio_actual = os.path.dirname(__file__)
+    #     path = os.path.join(directorio_actual, "Ranking.csv")
+
+    #     with open(path, mode= "a", encoding= "utf-8") as archivo:
+    #             archivo.write(f "{nombre} - {puntuacion}\n")
+                
+    subir_ranking_csv(nombre,str(puntuacion))
+    
+    
+    if puntuacion > max_puntaje:
+        max_puntaje = puntuacion
+    pygame.mixer.music.stop()
+    sonido_gameover.play()
+    SCREEN.blit(imagen_fin, ORIGEN)
+    mostrar_texto(SCREEN, "Game Over", fuente, SCREEN_CENTER, BLACK)
+    mostrar_texto(SCREEN, "Pulsa SPACE para volver a jugar", fuente, START_POS, BLACK)
+    mostrar_texto(SCREEN,f"Ultima Puntuacion: {puntuacion}", fuente, ULT_PUNTUACION_POS, BLACK, None)
+    mostrar_texto(SCREEN,f"Maxima Puntuacion: {max_puntaje}", fuente, MAX_PUNTUACION_POS, BLACK, None)
+    esperar_usuario(K_SPACE)
+    
+    # pygame.display.flip()
+    # clock.tick(60)

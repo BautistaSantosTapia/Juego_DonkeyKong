@@ -1,8 +1,11 @@
 import pygame
 from random import randrange, randint
 from settings import *
+from ranking import ver_rankings
+from game_over import pantalla_game_over
 from pygame.locals import *
 from sys import exit
+import os
 
 def get_color(lista:list):
     return lista[randint(0, len(lista) - 1)]
@@ -138,3 +141,70 @@ def esperar_click_usuario(rect:pygame.Rect):
                     click_posicion = event.pos
                     if punto_en_rectangulo(click_posicion, rect):
                         continuar = False
+
+def esperar_click_usuario_3(rect_1:pygame.Rect,rect_2:pygame.Rect,rect_3:pygame.Rect):  
+    continuar = True
+    while continuar:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                salir_juego()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click_posicion = event.pos
+                    if punto_en_rectangulo(click_posicion, rect_1):
+                        continuar = False
+                    elif punto_en_rectangulo(click_posicion, rect_2):
+                        continuar = False
+                        ver_rankings(pygame.display.set_mode(SCREEN_SIZE))
+                    # elif punto_en_rectangulo(click_posicion, rect_2):
+                    #     continuar = False
+                    #     pantalla_game_over(pygame.display.set_mode(SCREEN_SIZE), puntuacion)
+
+
+
+
+
+def subir_ranking_csv(nombre_archivo, puntuacion, nombre="Desconocido"):
+    directorio_actual = os.path.dirname(__file__)
+    path = os.path.join(directorio_actual, nombre_archivo)
+
+    with open(path, mode= "a", encoding= "utf-8") as archivo:
+            archivo.write(f"{nombre} {puntuacion}\n")
+
+"""
+def subir_ranking_csv(nombre_archivo, puntuacion):
+    directorio_actual = os.path.dirname(__file__)
+    path = os.path.join(directorio_actual, nombre_archivo)
+
+    with open(path, mode= "a", encoding= "utf-8") as archivo:
+            archivo.write(puntuacion + "\n")"""
+
+
+def cargar_archivo_csv(nombre_archivo:str):
+    """la funcion lee un archivo csv y lo pasa a una lista de diccionarios
+
+    Args:
+        nombre_archivo (str): el nombre del archivo
+
+    Returns:
+        _type_: retorna la lista con los diccionarios
+    """
+    directorio_actual = os.path.dirname(__file__)
+    path = os.path.join(directorio_actual, nombre_archivo)
+
+    with open(path, mode= "r", encoding= "utf-8") as archivo:
+        lista_datos = []
+        encabezado = archivo.readline().strip("\n").split(",")
+
+        for linea in archivo.readlines(): 
+            pelicula = {}
+            linea = linea.strip("\n").split(",")
+
+            id,titulo,genero,rating = linea
+            pelicula["id"] = int(id)
+            pelicula["titulo"] = titulo
+            pelicula["genero"] = genero
+            pelicula["rating"] = int(rating)
+            lista_datos.append(pelicula)
+
+    return lista_datos

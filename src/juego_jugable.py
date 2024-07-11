@@ -1,31 +1,3 @@
-"""import pygame
-import sys
-
-def game_loop(screen):
-    clock = pygame.time.Clock()
-    running = True
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
-                running = False
-        
-
-        # Lógica del juego aquí
-
-        screen.fill((0, 0, 0))
-        pygame.display.flip()
-        clock.tick(60)
-
-    # Llamar a la pantalla de game over
-    from src_guia_profe.main_guia_profe import game_over_screen
-    game_over_screen(screen, 100)"""
-
-
-###############################3
 
 import pygame
 from src.settings import *
@@ -34,13 +6,13 @@ from src.functions import *
 from pygame.locals import *
 from sys import exit
 import os
-from game_guia_profe import game_loop
+from src.
 from config import config_menu
-from ranking import show_ranking
+from ranking import ver_ranking
 from game_over import game_over_screen
 
 
-def game_loop(screen):
+def loop_jugable(SCREEN):
     pygame.mouse.set_visible(False)
 
     # juego principal
