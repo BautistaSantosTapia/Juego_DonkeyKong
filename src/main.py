@@ -658,7 +658,7 @@ def menu_principal():
         #dibujar pantalla
             SCREEN.blit(imagen_background, ORIGEN)
 
-            pygame.draw.rect(SCREEN, player["color"], player["rect"], player["borde"], player["radio"])  #hitbox
+            # pygame.draw.rect(SCREEN, player["color"], player["rect"], player["borde"], player["radio"])  #hitbox
             # for obstaculo in obstaculos:
             #     pygame.draw.rect(SCREEN, obstaculo["color"], obstaculo["rect"])  #hitbox
 
