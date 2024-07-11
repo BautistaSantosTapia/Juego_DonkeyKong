@@ -57,15 +57,24 @@ def colision_circulos(rect_1, rect_2)->bool:
     return distancia <= r1 + r2
 
 
-def crear_coin(imagen=None)->dict:
-    width_coin = 70
-    height_coin = 70
+def crear_coin_left(imagen=None)->dict:
+    width_coin = 47
+    height_coin = 47
 
-    return new_player(imagen, randint(0, WIDTH - width_coin), randint(-HEIGHT, 0 - height_coin), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
+    return new_player(imagen, randint(WIDTH + width_coin, WIDTH*2), randint(460, HEIGHT - height_coin), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
+def crear_coin_right(imagen=None)->dict:
+    width_coin = 47
+    height_coin = 47
 
-def cargar_lista_coins(lista:list, cant:int, imagen=None):
+    return new_player(imagen, randint(-WIDTH, 0-width_coin), randint(300,415), width_coin, height_coin, YELLOW, 0, 0, height_coin//2, speed_y= randint(min_coin_speed,max_coin_speed))
+                            
+def cargar_lista_coins_left(lista:list, cant:int, imagen=None):
     for _ in range(cant):
-        lista.append(crear_coin(imagen))
+        lista.append(crear_coin_left(imagen))
+def cargar_lista_coins_right(lista:list, cant:int, imagen=None):
+    for _ in range(cant):
+        lista.append(crear_coin_right(imagen))
+
 
 def crear_vida(imagen=None)->dict:
     return new_player(imagen, VIDA_POS[0], VIDA_POS[1], VIDA_SIZE[0], VIDA_SIZE[1])
@@ -73,6 +82,12 @@ def crear_vida(imagen=None)->dict:
 def cargar_lista_vidas(lista:list, cant:int, imagen=None):
     for _ in range(cant):
         lista.append(crear_vida(imagen))
+
+def new_life(imagen, x, y, width, height):
+    return new_player(imagen, x, y, width, height)
+
+def ganar_juego(imagen, x, y, width, height):
+    return new_player(imagen, x, y, width, height)
         
 def crear_laser(posicion:tuple[int,int],color:tuple[int,int,int]=(0,0,0), speed:int=15):
     r = pygame.Rect(0, 0, laser_width, laser_height)

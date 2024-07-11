@@ -20,9 +20,8 @@ fuente = pygame.font.SysFont("Arial", 42)
 imagen_player = pygame.image.load("./src/assets/banana.png")
 imagen_asteroide = pygame.image.load("./src/assets/fuego.png")
 imagen_background = pygame.transform.scale(pygame.image.load("./src/assets/pared_ladrillos.webp"), SCREEN_SIZE)
-imagen_start = pygame.transform.scale(pygame.image.load("./src/assets/start_button.png"), START_BUTTON)
+imagen_start = pygame.transform.scale(pygame.image.load("./src/assets/start.png"), START_BUTTON)
 rect_start = imagen_start.get_rect(center=START_BUTTON_POS)
-imagen_tiro = pygame.transform.scale(pygame.image.load("./src/assets/semilla.png"), START_BUTTON)
 
 # Evento personalizado
 GAME_TIMEOUT = USEREVENT + 2
