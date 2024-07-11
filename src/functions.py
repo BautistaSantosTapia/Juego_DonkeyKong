@@ -86,6 +86,9 @@ def cargar_lista_vidas(lista:list, cant:int, imagen=None):
     for _ in range(cant):
         lista.append(crear_vida(imagen))
 
+# def cargar_vida_especial(lista:list, cant:int, imagen=None):
+#     lista.insert(3,crear_vida(imagen))
+
 def new_life(imagen, x, y, width, height):
     return new_player(imagen, x, y, width, height)
 
@@ -214,3 +217,48 @@ def cargar_archivo_csv(nombre_archivo:str):
             lista_datos.append(pelicula)
 
     return lista_datos
+
+
+
+def cargar_corazones(lista:list, posicion_inicion):
+    lista_buena = []
+    pixeles = posicion_inicion
+    for elemento in lista:
+        elemento["rect"].left = pixeles
+        lista_buena.append(elemento)
+        pixeles += 25
+    return lista_buena
+
+
+
+
+
+"""
+def cargar_elementos_en_fila(elementos: list, posicion_inicial: int, espacio: int = 25):
+    
+    Organiza los elementos en una fila, comenzando desde una posición inicial especificada.
+
+    Parámetros:
+    - elementos: lista de diccionarios que contienen 'rect'.
+    - posicion_inicial: posición x inicial donde se colocará el primer elemento.
+    - espacio: espacio en píxeles entre los elementos. Predeterminado es 25.
+    
+    Retorna:
+    - lista organizada con los elementos posicionados en fila.
+    
+    pixeles = posicion_inicial
+    for elemento in elementos:
+        elemento["rect"].left = pixeles
+        pixeles += espacio
+    return elementos
+"""
+
+
+"""            for vida in vidas:
+                SCREEN.blit(vida["img"], vida["rect"])
+                for _ in range(vidas_a_mostrar):
+                    vida["rect"].left += 25
+                vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
+                if item_vida and bandera_vida==True:
+                    vidas[0]["rect"].left = vidas[-1]["rect"].left + 25
+                    SCREEN.blit(item_vida["img"], item_vida["rect"])"""

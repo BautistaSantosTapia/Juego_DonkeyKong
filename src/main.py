@@ -7,7 +7,7 @@ from sys import exit
 #inicio
 
 
-#inicializamos los modulos 
+#inicializamos los modulos
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -83,7 +83,7 @@ while True:
     pygame.time.set_timer(TIMER_COIN, 5000)
     pygame.time.set_timer(GAME_TIMEOUT, 100000)
 
-    
+
 
     #creamos al jugador/bloque
     player = new_player(imagen_player, randint(0, WIDTH - rect_width), randint(0, HEIGHT - rect_height), rect_width, rect_height, color_aleatorio(), 3, randrange(31), rect_height//2)#dir = choice(direcciones), radio=randint(-1,25)
@@ -94,7 +94,7 @@ while True:
     vidas = []
     cargar_lista_vidas(vidas, vidas_actuales, imagen_vida)#CANT_VIDAS
 
-    #piso 
+    #piso
     # pisos = []
     # cargar_lista_pisos(pisos, 1, BLACK)
     piso = pygame.rect.Rect(0,650,600,40)
@@ -123,7 +123,7 @@ while True:
                 if event.key == K_UP:
                     move_up = True
                 if event.key == K_DOWN:
-                    move_down = True        
+                    move_down = True
                 if event.key == K_m:
                     if sonando_musica:
                         pygame.mixer.music.pause()
@@ -142,7 +142,7 @@ while True:
                             sonido laser
                         """ """
                         laser = crear_laser(player["rect"].midtop)
-            
+
             if event.type == KEYUP:
                 if event.key == K_LEFT:
                     move_left = False
@@ -152,7 +152,7 @@ while True:
                     move_up = False
                 if event.key == K_DOWN:
                     move_down = False
-            
+
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     new_coin = crear_coin()
@@ -161,7 +161,7 @@ while True:
                     coins.append(new_coin)
                 if event.button == 3:
                     player["rect"].center = SCREEN_CENTER
-            
+
             if event.type == MOUSEMOTION:
                 if event.buttons[2] == 1:
                     player["rect"].center = event.pos
@@ -219,15 +219,15 @@ while True:
         """"""# borra y restaura monedas
         for coin in coins[:]: # es una copia de la lista [desde:hasta]
             if colision_circulos(coin["rect"], player["rect"]):
-                sonido_coin.play()  
+                sonido_coin.play()
                 #contador Score
-                puntuacion+=1    
+                puntuacion+=1
                 coins.remove(coin)
                 if len(coins) == 0:
                     sonido_exito.play()
                     cargar_lista_coins(coins, CANT_COINS, imagen_asteroide_2)""" """
-        
-        # 
+
+        #
         for coin in coins[:]:
             if len(coins)>0:
                 if colision_circulos(coin["rect"], player["rect"]):
@@ -243,13 +243,13 @@ while True:
                 if laser:
                     if detectar_colision(laser["rect"], coin["rect"]):
                         puntuacion += 1
-                        sonido_coin.play()  
+                        sonido_coin.play()
                         coins.remove(coin)
                         # coins.append(crear_coin(imagen_asteroide_2)) no hace falta que aparezca otro meteorito
                         laser = None
 
 
-                
+
     #dibujar pantalla
         print(vidas)
         SCREEN.blit(imagen_background, ORIGEN)
@@ -327,7 +327,7 @@ import os
 #inicio
 
 
-#inicializamos los modulos 
+#inicializamos los modulos
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -415,7 +415,7 @@ def menu_principal():
         puntuacion = 0
         laser_right = None
         laser_left = None
-        vidas_actuales = 10##############
+        # vidas_actuales = 10##############
         vidas_a_mostrar = 10##############
         item_vida = None
         arma = None
@@ -434,7 +434,7 @@ def menu_principal():
         pygame.time.set_timer(TIMER_LIFE, 10000)
         # pygame.time.set_timer(GAME_TIMEOUT, 100000)
 
-        
+
 
         #creamos al jugador/bloque
         player = new_player(imagen_banana, 20, 479, rect_width, rect_height, color_aleatorio(), 3, randrange(31), rect_height // 2)
@@ -453,7 +453,7 @@ def menu_principal():
         cargar_lista_coins_right(coins_right, CANT_COINS, imagen_fuego)
         # vidas
         vidas = []
-        cargar_lista_vidas(vidas, vidas_actuales, imagen_vida)#CANT_VIDAS
+        cargar_lista_vidas(vidas, vidas_a_mostrar, imagen_vida)#CANT_VIDAS
         bandera_vida = True
         #mono
         mono_win = ganar_juego(imagen_mono, 5, 60, mono_width, mono_height)
@@ -488,7 +488,7 @@ def menu_principal():
                     if event.key == K_UP:
                         move_up = True
                     if event.key == K_DOWN:
-                        move_down = True        
+                        move_down = True
                     if event.key == K_m:
                         if sonando_musica:
                             pygame.mixer.music.pause()
@@ -516,7 +516,7 @@ def menu_principal():
                                 laser_left = crear_laser(player["rect"].midleft,speed=35,laser_width=13,laser_height=13)
                             else:
                                 laser_left = crear_laser(player["rect"].midleft)
-                
+
                 if event.type == KEYUP:
                     if event.key == K_LEFT:
                         move_left = False
@@ -530,7 +530,7 @@ def menu_principal():
                 if event.type == TIMER_LIFE:
                     item_vida = new_life(imagen_vida ,500, 400, 25, 25)
 
-                if event.type == GAME_TIMEOUT or vidas_actuales == 0:
+                if event.type == GAME_TIMEOUT or len(vidas) == 0:
                     is_running = False
                     """ir a pantalla game over"""
 
@@ -585,15 +585,15 @@ def menu_principal():
                 if len(coins_left)>0:
                     if colision_circulos(coin["rect"], player["rect"]):
                         coins_left.remove(coin)
-                        vidas_actuales -= 1
+                        # vidas_actuales -= 1
                         vidas_a_mostrar -= 1
-                        vidas.remove(vidas[-1])
+                        vidas.remove(vidas[0])
                         sonido_dano.play()
                         pygame.time.wait(100)
                     if laser_right:
                         if detectar_colision(laser_right["rect"], coin["rect"]):
                             puntuacion += 1
-                            sonido_explosion.play()  
+                            sonido_explosion.play()
                             coins_left.remove(coin)
                             coins_left.append(crear_coin_left(imagen_fuego))# no hace falta que aparezca otro meteorito
                             laser_right = None
@@ -608,29 +608,32 @@ def menu_principal():
                 if len(coins_right)>0:
                     if colision_circulos(coin["rect"], player["rect"]):
                         coins_right.remove(coin)
-                        vidas_actuales -= 1
+                        # vidas_actuales -= 1
                         vidas_a_mostrar -= 1
-                        vidas.remove(vidas[-1])
+                        vidas.remove(vidas[0])
                         sonido_dano.play()
                         pygame.time.wait(100)
                     if laser_left:
                         if detectar_colision(laser_left["rect"], coin["rect"]):
                             puntuacion += 1
-                            sonido_explosion.play()  
+                            sonido_explosion.play()
                             coins_right.remove(coin)
                             coins_right.append(crear_coin_right(imagen_fuego))# no hace falta que aparezca otro meteorito
                             laser_left = None
+
 
             if item_vida:
                 if detectar_colision(item_vida["rect"], player["rect"]):
                     print(vidas)
                     sonido_vida.play()
-                    vidas_actuales += 1
+                    # vidas_actuales += 1
                     vidas_a_mostrar += 1
-                    #vidas.append(1)
-                    cargar_lista_vidas(vidas,1,imagen_vida)
+                    vidas.insert(0,new_player(imagen_vida, VIDA_POS[0], VIDA_POS[1], VIDA_SIZE[0], VIDA_SIZE[1]))
+                    # cargar_lista_vidas(vidas,1,imagen_vida)
+                    print(vidas)
                     bandera_vida = False
                     item_vida = None
+
 
             if detectar_colision(mono_win["rect"], player["rect"]):
                 sonido_exito.play()
@@ -642,9 +645,9 @@ def menu_principal():
                     print("toco")
                     player["rect"].x, player["rect"].y = old_player_x, old_player_y
                     sonido_dano.play()
-                    vidas_actuales -= 1
+                    # vidas_actuales -= 1
                     vidas_a_mostrar -= 1
-                    vidas.remove(vidas[-1])
+                    vidas.remove(vidas[0])
                     pygame.time.wait(250)
 
             if arma:
@@ -652,9 +655,9 @@ def menu_principal():
                     sonido_vida.play()
                     bandera_poder = True
                     arma = None
-            
 
-                    
+
+
         #dibujar pantalla
             SCREEN.blit(imagen_background, ORIGEN)
 
@@ -680,22 +683,21 @@ def menu_principal():
                     pygame.draw.rect(SCREEN, coin["color"], coin["rect"], coin["borde"], coin["radio"])
 
 
-            for vida in vidas:
-                if vida["img"]:
-                    SCREEN.blit(vida["img"], vida["rect"])
-                else:
-                    pygame.draw.rect(SCREEN, vida["color"], vida["rect"], vida["borde"], vida["radio"])
-                for _ in range(vidas_a_mostrar):
-                    vida["rect"].left += 25
-                vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
-
             if item_vida and bandera_vida==True:
                 SCREEN.blit(item_vida["img"], item_vida["rect"])
-                
+
+            # for vida in vidas:
+            #     SCREEN.blit(vida["img"], vida["rect"])
+
+            #     for _ in range(vidas_a_mostrar):
+            #         vida["rect"].left += 25
+            #     vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
+
+
             if arma:
                 SCREEN.blit(arma["img"], arma["rect"])
 
-            
+
             SCREEN.blit(mono_win["img"], mono_win["rect"])
 
 
@@ -713,14 +715,22 @@ def menu_principal():
 
             mostrar_texto(SCREEN,f"Puntuacion: {puntuacion}", fuente, PUNTUACION_POS, BLACK, None)
 
-            for vida in vidas:
-                if vida["img"]:
-                    SCREEN.blit(vida["img"], vida["rect"])
-                else:
-                    pygame.draw.rect(SCREEN, vida["color"], vida["rect"], vida["borde"], vida["radio"])
-                for _ in range(vidas_a_mostrar):
-                    vida["rect"].left += 25
-                vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
+            # for vida in vidas:
+            #     SCREEN.blit(vida["img"], vida["rect"])
+            #     for _ in range(vidas_a_mostrar):
+            #         vida["rect"].left += 25
+            #     vidas_a_mostrar -= 1 # para que no se vaya de la pantalla
+            #     if item_vida and bandera_vida==True:
+            #         vidas[0]["rect"].left = vidas[-1]["rect"].left + 25
+            #         SCREEN.blit(item_vida["img"], item_vida["rect"])
+
+            print(vidas)
+            lista_biien = cargar_corazones(vidas,5)
+            for el in lista_biien:
+                SCREEN.blit(el["img"], el["rect"])
+
+
+
 
 
             SCREEN.blit(player["img"], player["rect"])
