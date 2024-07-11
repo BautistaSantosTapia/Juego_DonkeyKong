@@ -152,8 +152,14 @@ def esperar_click_usuario_3(rect_1:pygame.Rect,rect_2:pygame.Rect,rect_3:pygame.
                 if event.button == 1:
                     click_posicion = event.pos
                     if punto_en_rectangulo(click_posicion, rect_1):
+                        sonido_boton = pygame.mixer.Sound("./src/assets/boton.mp3")
+                        sonido_boton.set_volume(0.1)
+                        sonido_boton.play()
                         continuar = False
                     elif punto_en_rectangulo(click_posicion, rect_2):
+                        sonido_boton = pygame.mixer.Sound("./src/assets/boton.mp3")
+                        sonido_boton.set_volume(0.1)
+                        sonido_boton.play()
                         continuar = False
                         ver_rankings(pygame.display.set_mode(SCREEN_SIZE))
                     # elif punto_en_rectangulo(click_posicion, rect_2):

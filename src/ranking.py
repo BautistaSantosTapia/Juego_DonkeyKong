@@ -26,7 +26,7 @@ def ver_rankings(pantalla):
         pantalla.blit(pygame.transform.scale(pygame.image.load("./src/assets/selva_ranking.webp"), SCREEN_SIZE), ORIGEN)
 
         font = pygame.font.Font(None, 36)
-        y_offset = 100
+        y_offset = 60
         for score in scores:
             score_text = font.render(f'Puntuacion: {score[0]}', True, (0, 0, 0))
             pantalla.blit(score_text, (300, y_offset))

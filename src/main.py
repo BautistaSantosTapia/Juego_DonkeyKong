@@ -336,7 +336,7 @@ SCREEN = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Juego Donkey Kong")
 
 #texto
-fuente = pygame.font.SysFont("Arial", 36)
+fuente = pygame.font.SysFont("Arial", 48)
 
 #imagenes
 imagen_banana = pygame.image.load("./src/assets/banana.png")#
@@ -366,6 +366,7 @@ sonido_explosion = pygame.mixer.Sound("./src/assets/explosion.mp3")#
 sonido_gameover = pygame.mixer.Sound("./src/assets/perder.mp3")#
 sonido_exito = pygame.mixer.Sound("./src/assets/ganar.mp3")#
 sonido_dano = pygame.mixer.Sound("./src/assets/dano.ogg")#
+sonido_intro = pygame.mixer.Sound("./src/assets/intro.mp3")#
 
 sonido_disparo.set_volume(0.1)
 sonido_pausa.set_volume(0.1)
@@ -375,6 +376,7 @@ sonido_explosion.set_volume(0.1)
 sonido_gameover.set_volume(0.1)
 sonido_exito.set_volume(0.1)
 sonido_dano.set_volume(0.1)
+sonido_intro.set_volume(0.1)
 
 
 
@@ -397,6 +399,7 @@ def menu_principal():
         SCREEN.blit(imagen_ranking, rect_ranking)
         SCREEN.blit(imagen_config, rect_config)
         pygame.display.flip()
+        sonido_intro.play(-1)
         # esperar_click_usuario(rect_start)
         # esperar_click_usuario(rect_ranking)
         # esperar_click_usuario(rect_config)
@@ -405,6 +408,7 @@ def menu_principal():
 
 
         pygame.mouse.set_visible(False)
+        sonido_intro.stop()
 
         # juego principal
         max_puntaje = 0
@@ -494,7 +498,7 @@ def menu_principal():
                     if event.key == K_p:
                         sonido_pausa.play()
                         pygame.mixer.music.pause()
-                        mostrar_texto(SCREEN, "Pausa", fuente, PAUSA_POS, BLACK, None)
+                        mostrar_texto(SCREEN, "Pausa", fuente, PAUSA_POS, WHITE, None)
                         esperar_usuario(K_p)
                         if sonando_musica:
                             pygame.mixer.music.unpause()
@@ -733,10 +737,10 @@ def menu_principal():
         sonido_gameover.play()
         subir_ranking_csv("Ranking.csv",str(puntuacion))
         SCREEN.blit(imagen_fin, ORIGEN)
-        mostrar_texto(SCREEN, "Game Over", fuente, SCREEN_CENTER, BLACK)
-        mostrar_texto(SCREEN, "Pulsa SPACE para volver a jugar", fuente, START_POS, BLACK)
-        mostrar_texto(SCREEN,f"Ultima Puntuacion: {puntuacion}", fuente, ULT_PUNTUACION_POS, BLACK, None)
-        mostrar_texto(SCREEN,f"Maxima Puntuacion: {max_puntaje}", fuente, MAX_PUNTUACION_POS, BLACK, None)
+        mostrar_texto(SCREEN, "Game Over", pygame.font.SysFont(None, 74), SCREEN_CENTER, WHITE)
+        mostrar_texto(SCREEN, "Pulsa SPACE para volver a jugar", pygame.font.SysFont(None, 42), START_POS, WHITE)
+        mostrar_texto(SCREEN,f"Ultima Puntuacion: {puntuacion}", pygame.font.SysFont(None, 42), ULT_PUNTUACION_POS, WHITE, None)
+        mostrar_texto(SCREEN,f"Maxima Puntuacion: {max_puntaje}", pygame.font.SysFont(None, 42), MAX_PUNTUACION_POS, WHITE, None)
         esperar_usuario(K_SPACE)
 
 
